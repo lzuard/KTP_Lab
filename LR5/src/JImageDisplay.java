@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public class JImageDisplay extends javax.swing.JComponent {
 
     /** Содержит изображение и управляет им **/
-    private java.awt.image.BufferedImage image;
+    public java.awt.image.BufferedImage image;
 
     /** Конструктор класса, принимает ширину и высоту изображения и строит его **/
     public JImageDisplay(int width, int height){

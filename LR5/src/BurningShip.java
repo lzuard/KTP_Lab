@@ -1,7 +1,7 @@
 import java.awt.geom.Rectangle2D;
 
-/** Класс, который строит фрактал Мандельброта **/
-public class Mandelbrot extends FractalGenerator{
+/**Класс, который строит фрактал Burning ship **/
+public class BurningShip extends FractalGenerator{
 
     /** Максимальное количество итераций **/
     public static final int MAX_ITERATIONS = 2000;
@@ -13,12 +13,12 @@ public class Mandelbrot extends FractalGenerator{
      */
     public void getInitialRange(Rectangle2D.Double rectangle){
         rectangle.x=-2;
-        rectangle.y=-1.5;
-        rectangle.width=3;
-        rectangle.height=3;
+        rectangle.y=-2.5;
+        rectangle.width=4;
+        rectangle.height=4;
     }
 
-    /** Реализует итеративную функцию для фрактала Манделброта **/
+    /** Реализует итеративную функцию для фрактала Burning ship **/
     public int numIterations(double x, double y){
 
         int i = 0;
@@ -31,7 +31,7 @@ public class Mandelbrot extends FractalGenerator{
         while (i < MAX_ITERATIONS && num * num + num_i * num_i < 4)
         {
             double new_num = num * num - num_i * num_i + x;
-            double new_num_i = 2 * num * num_i + y;
+            double new_num_i = 2 * Math.abs(num) * Math.abs(num_i) + y;
             num = new_num;
             num_i = new_num_i;
             i += 1;
@@ -47,6 +47,6 @@ public class Mandelbrot extends FractalGenerator{
     /** Получить название фрактала **/
     @Override
     public String toString(){
-        return "Mandelbrot";
+        return "Burning ship";
     }
 }
