@@ -16,6 +16,8 @@ public class FractalExplorer extends JFrame {
     /** Размер изображения **/
     private int screenSize;
 
+    private int rowsRemaining;
+
     /** Объект компонента отображения фрактала **/
     private JImageDisplay display;
 
@@ -29,6 +31,11 @@ public class FractalExplorer extends JFrame {
 
     /** Объект плоскости отрисовки фрактала **/
     private Rectangle2D.Double range;
+
+    /** Отключаемые компоненты окна **/
+    JButton resetButton = new JButton("Reset fractal");
+    JButton saveButton = new JButton("Save");
+    JComboBox comboBox = new JComboBox();
 
     /** Конструктор, принимающий рамзер окна (длину или ширину) **/
     public FractalExplorer(int size){
@@ -62,9 +69,6 @@ public class FractalExplorer extends JFrame {
         JPanel lowerPanel = new JPanel();
 
         //Инициализация элементов
-        JButton resetButton = new JButton("Reset fractal");
-        JButton saveButton = new JButton("Save");
-        JComboBox comboBox = new JComboBox();
         JLabel label = new JLabel();
 
         //Установка текста для ферхней панели
@@ -117,28 +121,19 @@ public class FractalExplorer extends JFrame {
 
     /** Метод отрисовки фрактала **/
     private void drawFractal(){
+        enableUI(false);
+        rowsRemaining=screenSize;
 
-        //Перебор всех пикселей внутри окна
-        for (int x=0; x<screenSize; x++) {
-            for (int y = 0; y < screenSize; y++) {
-                //Поиск соответсвующих координат х и у в области отображения фрактала
-                double xCoord = fractal.getCoord(range.x, range.x + range.width, screenSize, x);
-                double yCoord = fractal.getCoord(range.y, range.y + range.height, screenSize, y);
+       for(int i=0;i<screenSize;i++){
+           FractalWorker worker = new FractalWorker(i);
+           worker.execute();
+       }
+    }
 
-                //Количество итерация для координат в области отображения
-                int iteration = fractal.numIterations(xCoord, yCoord);
-
-                //Выбор цвета пикселя в зависимости от количества итераций
-                if (iteration == -1) {
-                    display.drawPixel(x, y, 0);
-                } else {
-                    float hue = 0.7f + (float) iteration / 200f;
-                    int rgbColor = Color.HSBtoRGB(hue, 1f, 1f);
-                    display.drawPixel(x, y, rgbColor);
-                }
-            }
-        }
-        display.repaint();
+    private void enableUI(boolean enable){
+        resetButton.setEnabled(enable);
+        saveButton.setEnabled(enable);
+        comboBox.setEnabled(enable);
     }
 
     /** Внутренний класс для отработки нажатия на кнопки **/
@@ -185,15 +180,17 @@ public class FractalExplorer extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            int x=e.getX();
-            int y=e.getY();
+            if(rowsRemaining==0) {
+                int x = e.getX();
+                int y = e.getY();
 
-            double xCoord = fractal.getCoord(range.x, range.x + range.width, screenSize, x);
-            double yCoord = fractal.getCoord(range.y,range.y+range.height, screenSize,y);
+                double xCoord = fractal.getCoord(range.x, range.x + range.width, screenSize, x);
+                double yCoord = fractal.getCoord(range.y, range.y + range.height, screenSize, y);
 
-            fractal.recenterAndZoomRange(range,xCoord,yCoord,0.5);
+                fractal.recenterAndZoomRange(range, xCoord, yCoord, 0.5);
 
-            drawFractal();
+                drawFractal();
+            }
         }
     }
 
@@ -209,6 +206,57 @@ public class FractalExplorer extends JFrame {
         }
     }
 
+    /** Внутрений класс для вычисления цвета строки фрактала в многопоточном режиме **/
+    private class FractalWorker extends SwingWorker<Object, Object>{
+
+        public int yCoord=0;
+        private int[] pixelsRGB;
+
+        public FractalWorker(int yCoord){
+            this.yCoord=yCoord;
+        }
+
+
+
+        /** Метод, выполняющийся в фоновом режиме **/
+        @Override
+        protected Object doInBackground() throws Exception {
+
+            pixelsRGB = new int[screenSize];
+
+            //Перебор строки пикселей
+            for (int i = 0; i < pixelsRGB.length; i++) {
+                double x = fractal.getCoord(range.x, range.x + range.width, screenSize, i);
+                double y = fractal.getCoord(range.y, range.y + range.height, screenSize, yCoord);
+                int iteration = fractal.numIterations(x, y);
+                if (iteration == -1){
+                    pixelsRGB[i] = 0;
+                }
+                else {
+
+                    float hue = 0.7f + (float) iteration / 200f;
+                    int rgbColor = Color.HSBtoRGB(hue, 1f, 1f);
+                    pixelsRGB[i] = rgbColor;
+                }
+            }
+            return null;
+        }
+
+        /** Метод, которые вызывается по завершению doInBackground */
+        @Override
+        protected void done(){
+            for(int i=0;i<screenSize;i++){
+                display.drawPixel(i,yCoord,pixelsRGB[i]);
+            }
+
+            display.repaint(0,0,yCoord,screenSize,1);
+
+            rowsRemaining--;
+            if(rowsRemaining==0){
+                enableUI(true);
+            }
+        }
+    }
 
     /** Старт программы **/
     public static void main(String[] args){
