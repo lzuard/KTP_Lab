@@ -29,7 +29,7 @@ public class FractalExplorer extends JFrame {
 
     /** Объект плоскости отрисовки фрактала **/
     private Rectangle2D.Double range;
-
+    //TODO
     /** Конструктор, принимающий рамзер окна (длину или ширину) **/
     public FractalExplorer(int size){
 

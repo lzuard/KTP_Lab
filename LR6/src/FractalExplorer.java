@@ -263,6 +263,10 @@ public class FractalExplorer extends JFrame {
         FractalExplorer explorer = new FractalExplorer(800);
         explorer.createAndShowGui();
         explorer.drawFractal();
+
+        Thread a = new Thread();
+
+        a.run();
     }
 
 }
