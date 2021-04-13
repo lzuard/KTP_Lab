@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/KTP.iml" filepath="$PROJECT_DIR$/.idea/KTP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR1/LR1.iml" filepath="$PROJECT_DIR$/LR1/LR1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR2/LR2.iml" filepath="$PROJECT_DIR$/LR2/LR2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR3/LR3.iml" filepath="$PROJECT_DIR$/LR3/LR3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR4/LR4.iml" filepath="$PROJECT_DIR$/LR4/LR4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR5/LR5.iml" filepath="$PROJECT_DIR$/LR5/LR5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR6/LR6.iml" filepath="$PROJECT_DIR$/LR6/LR6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LR7/LR7.iml" filepath="$PROJECT_DIR$/LR7/LR7.iml" />
+    </modules>
+  </component>
+</project>
