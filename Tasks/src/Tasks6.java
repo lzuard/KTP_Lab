@@ -82,11 +82,7 @@ public class Tasks6 {
 
 
     //Задание 3
-    /** 4 пример не работает из за того, что в ключе две одинаковые буквы,
-     *
-     * ебал это переделывать
-     *
-     * */
+
     public static String nicoCipher(String message,String key){
         int keySize=key.length();       //Длинна ключа для сокращения кода
         String answer="";               //Ответ
@@ -157,17 +153,128 @@ public class Tasks6 {
 
 
     //Задание 5
-    //Параша
-    public static int[] isExact(int num) {
-
-        if (num==1){
-            return new int[]{1,1};
+    public static int[] isExact(int f, int m, int n) {
+        if (f < n) {
+            return isExact(f * (m + 1), m + 1, n);
         }
-        else{
-            int[] arr=isExact(num-1);
+        return new int[] {f, m};
+    }
 
+    public static int[] isExact(int n) {
+        int[] res = isExact(1, 1, n);
+        if (res[0] == n) return res;
+        return new int[] {};
+    }
+
+    //6
+    public static String fractions(String frac) {
+        int startBracket = frac.indexOf('(');
+        if (startBracket != -1) {
+            String f = frac.substring(startBracket+1, frac.length()-1);
+            frac = frac.substring(0, startBracket);
+            for (int i = 0; i < 9 - f.length(); i++)
+                frac += f;
         }
+        double a = Double.parseDouble(frac);
+        int div = 2;
+        while (Math.ceil(a * div) - a * div > 0.000001){
+            div++;
+        }
+        return "" + (int)Math.ceil(a * div) + "/" + div;
+    }
 
-        return null;
+    //7
+    public static String pilish_string(String str) {
+        String res = "";
+        String pi = String.valueOf(Math.PI).replace(".", "");
+        int piIndex = 0;
+        int p;
+        int n;
+        while (str.length() > 0) {
+            p = pi.charAt(piIndex) - 48;
+            n = Math.min(p, str.length());
+            res += str.substring(0, n);
+            str = str.substring(n);
+            piIndex++;
+            if (str.length() > 0) {
+                res += ' ';
+            }
+            else if (p > n) {
+                for (int i = 0; i < p - n; i++) {
+                    res += res.charAt(res.length() - 1);
+                }
+            }
+        }
+        return res;
+    }
+
+    //8
+    public static String generateNonconsecutive(int n) {
+        String res = "";
+        String format = "%" + n + 's';
+        int count = 2 << (n-1);
+        nextNumber:
+        for (int i = 0; i < count; i++) {
+            String num = String.format(format, Integer.toBinaryString(i)).replace(' ', '0');
+            for (int j = 0; j < n - 1; j++) {
+                if (num.charAt(j) == '1' && num.charAt(j + 1) == '1') {
+                    continue nextNumber;
+                }
+            }
+            res += num + ' ';
+        }
+        return res.substring(0, res.length() - 1);
+    }
+
+    //9
+    private static int[] getLetterSet(String str) {
+        int[] set = new int[26];
+        for (char c : str.toCharArray())
+            set[c - 97]++;
+        return set;
+    }
+
+    public static String isValid(String str) {
+        int[] set = getLetterSet(str);
+        int[] medium = new int[str.length()];
+        for (int i = 0; i < set.length; i++)
+            if (set[i] != 0) medium[set[i]]++;
+        int cur = 0;
+        int max = 0;
+        for (int i = 0; i < medium.length; i++)
+            if (medium[i] > cur) {
+                cur = medium[i];
+                max = i;
+            }
+        boolean index = false;
+        for (int i = 0; i < set.length; i++)
+            if (set[i] != 0 && max - set[i] != 0) {
+                if (index) return "NO";
+                index = true;
+            }
+        return "YES";
+    }
+
+    //10
+    public static int[][] sumsUp(int[] arr) {
+        ArrayList<int[]> res = new ArrayList<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            if (map.containsKey(8 - arr[i])) {
+                int a = arr[i];
+                int b = 8 - a;
+                if (a > b) {
+                    b = a;
+                    a = 8 - b;
+                }
+                res.add(new int[] {i - map.get(8-arr[i]), a, b});
+            }
+            map.put(arr[i], i);
+        }
+        Collections.sort(res, (o1, o2) -> o1[0]-o2[0]);
+        int[][] newRes = new int[res.size()][];
+        for (int i = 0; i < res.size(); i++)
+            newRes[i] = new int[] {res.get(i)[1], res.get(i)[2]};
+        return newRes;
     }
 }

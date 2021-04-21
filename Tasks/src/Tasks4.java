@@ -156,11 +156,6 @@ public class Tasks4 {
         }
     }
     //7 right version
-    /** Мариам придумала
-     *
-     * отсортировать число и вычесть его из исходного
-     *
-     * */
     public static int mbGood(int number){
         int secondNumber;
         char[] numberSplit=String.valueOf(number).toCharArray();

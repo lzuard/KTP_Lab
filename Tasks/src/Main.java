@@ -53,5 +53,18 @@ public class Main {
         System.out.println(Tasks4.mbGood(665));
 
 
+        System.out.println(Tasks5.digitsCount(0));
+        System.out.println(Tasks5.totalPoints(new String[]{"dote", "dotes", "toes", "set", "dot", "dots", "sted"}, "tossed"));
+        System.out.println(Tasks5.rearrange("Tesh3 th5e 1I lov2e way6 she7 j4ust i8s."));
+        System.out.println(Tasks5.maxPossible(8732, 91255));
+        System.out.println(Tasks5.isNew(30));
+
+    }
+
+    public static int method1(int x){
+        return 0;
+    }
+    public static int method1(int x, int y){
+        return 0;
     }
 }
